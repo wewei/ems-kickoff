@@ -58,5 +58,5 @@ jobs:
         with:
           app-name: 'ems-kickoff'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_941FCDDF73E74B788A3083D462FEDFC4 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5D9FAD298DD74BAB93D6095F61E9BB2D }}
           package: .
