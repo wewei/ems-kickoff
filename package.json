@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "start": "nodemon .",
+    "start": "node .",
     "dev": "nodemon src/index.ts"
   },
   "keywords": [],
