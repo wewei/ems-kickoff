@@ -7,7 +7,7 @@
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "prestart": "npm run build",
-    "start": "nodemon build/index.js",
+    "start": "node build/index.js",
     "dev": "nodemon src/index.ts"
   },
   "keywords": [],
