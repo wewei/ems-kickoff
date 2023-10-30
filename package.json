@@ -6,7 +6,6 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "prestart": "npm run build",
     "start": "node .",
     "dev": "nodemon src/index.ts"
   },
