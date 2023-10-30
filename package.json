@@ -2,12 +2,12 @@
   "name": "ems-kickoff",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "prestart": "npm run build",
-    "start": "node build/index.js",
+    "start": "node .",
     "dev": "nodemon src/index.ts"
   },
   "keywords": [],
