@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 // Initialize the express engine
 const app = (0, express_1.default)();
 // Take a port 3000 for running server.
-const port = 3000;
+const port = Number.parseInt(process.env.PORT || "3000");
 // Handling '/' Request
 app.get('/', (_req, _res) => {
     _res.send("TypeScript With Express.");
