@@ -20,12 +20,12 @@ app.get('/', (_req, _res) => {
 });
 
 app.post('/api/register', async (req, res) => {
-    const { userId, deviceId } = req.body as { userId: string; deviceId: string };
+    const { alias, deviceId } = req.body as { alias: string; deviceId: string };
     const ua = req.get('User-Agent') || "Unknown UA";
 
-    const oldUserId = await register(userId, deviceId, ua);
+    console.log(`Registering with alias: ${alias}, deviceId: ${deviceId}, ua: ${ua}`);
 
-    return res.json({ oldUserId });
+    return res.json(await register(alias, deviceId, ua));
 });
 
 app.get('/api/users', async (req, res) => {
@@ -45,7 +45,7 @@ app.get('/api/config', async (req, res) => {
         luckyData: {},
     });
 });
- 
+
 // Server setup
 app.listen(port, () => {
     console.log(`TypeScript with Express 
