@@ -17,6 +17,7 @@ const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const db_1 = require("./db");
 const body_parser_1 = __importDefault(require("body-parser"));
+const lottery_config_1 = require("./lottery-config");
 // Initialize the express engine
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json({ limit: "1mb" }));
@@ -32,6 +33,21 @@ app.post('/api/register', (req, res) => __awaiter(void 0, void 0, void 0, functi
     const ua = req.get('User-Agent') || "Unknown UA";
     const oldUserId = yield (0, db_1.register)(userId, deviceId, ua);
     return res.json({ oldUserId });
+}));
+app.get('/api/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield (0, db_1.getAllUsers)();
+    return res.json({
+        users: users.map(({ alias, name, team }) => [alias, name, team]),
+    });
+}));
+app.get('/api/config', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const lotteryConfig = yield (0, lottery_config_1.getLotteryConfig)();
+    const users = yield (0, db_1.getAllUsers)();
+    return res.json({
+        cfgData: lotteryConfig,
+        leftUsers: users.map(({ alias, name, team }) => [alias, name, team]),
+        luckyData: {},
+    });
 }));
 // Server setup
 app.listen(port, () => {

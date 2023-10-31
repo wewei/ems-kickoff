@@ -1,2 +1,2 @@
-!function(){var o={507:function(o,r,e){console.log("Hello, Register!")}},r={};!function e(t){var n=r[t];if(void 0!==n)return n.exports;var i=r[t]={exports:{}};return o[t](i,i.exports,e),i.exports}("507")}();
+!function(){var o={889:function(o,r,e){console.log("Hello, Register!")}},r={};!function e(t){var n=r[t];if(void 0!==n)return n.exports;var i=r[t]={exports:{}};return o[t](i,i.exports,e),i.exports}("889")}();
 //# sourceMappingURL=register.js.map
