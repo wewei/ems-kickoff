@@ -1,7 +1,7 @@
 import { Level } from "level";
 import { readFile } from "fs/promises";
 import { chain, first, isArray, isObject, isString } from "lodash";
-import path from "path";
+import { resolve } from "app-root-path";
 
 export type User = {
     name: string;
@@ -48,11 +48,10 @@ function normalizeUsers(users: any, teams: string[]): User[] {
 }
 
 const AllUsers = (async () => {
-    const dataFilePath = path.resolve(__dirname, "../data/users.json");
+    const dataFilePath = resolve("data/users.json");
     const data = await readFile(dataFilePath, "utf-8")
         .then(JSON.parse)
         .catch(() => ({}));
-    console.log(data);
     const teams = normalizeTeams(data.teams);
     const users = normalizeUsers(data.users, teams);
     const aliasIndex = chain(users).groupBy('alias').mapValues(first).value() as Record<string, User>;
