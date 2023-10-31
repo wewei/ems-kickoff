@@ -59,6 +59,16 @@ let selectedCardIndex = [],
 
 initAll();
 
+function lowerBound(arr, value) {
+  function inRange(l, r) {
+    if (l + 1 >= r) return r;
+    const m = Math.floor((l + r) / 2);
+    return arr[m] >= value ? inRange(l, m) : inRange(m, r);
+  }
+  return inRange(-1, arr.length - 1);
+}
+
+
 /**
  * 初始化所有DOM
  */
@@ -621,7 +631,7 @@ function lottery() {
       luckyData = basicData.luckyUsers[currentPrize.type],
       leftCount = basicData.leftUsers.length,
       leftPrizeCount = currentPrize.count - (luckyData ? luckyData.length : 0);
-
+      
     if (leftCount < perCount) {
       addQipao("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！");
       basicData.leftUsers = basicData.users.slice();
@@ -629,7 +639,14 @@ function lottery() {
     }
 
     for (let i = 0; i < perCount; i++) {
-      let luckyId = random(leftCount);
+      const [positions, totalWeight] = basicData.leftUsers.reduce(([pos, s], user) => {
+        const sum = s + user[3];
+        pos.push(sum);
+        return [pos, sum];
+      }, [[], 0]);
+      const luckyPos = Math.random() * totalWeight;
+      let luckyId = lowerBound(positions, luckyPos);
+      console.log(luckyPos, luckyId, basicData.leftUsers[luckyId]);
       currentLuckys.push(basicData.leftUsers.splice(luckyId, 1)[0]);
       leftCount--;
       leftPrizeCount--;
@@ -722,7 +739,6 @@ function shine(cardIndex, color) {
 function shineCard() {
   let maxCard = 10,
     maxUser;
-  let shineCard = 10 + random(maxCard);
 
   setInterval(() => {
     // 正在抽奖停止闪烁

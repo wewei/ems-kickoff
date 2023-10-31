@@ -5,7 +5,9 @@ import { clearRegisterDB, clearUsersDB, getAllRegister, getAllUsers, register, s
 import bodyParser from 'body-parser'; 
 import { getLotteryConfig } from './lottery-config';
 import { normalizeTeams, normalizeUsers } from '../shared/user';
-import { chain } from 'lodash';
+import { chain, size } from 'lodash';
+
+const DEFAULT_WEIGHT = 0.001;
 
 // Initialize the express engine
 const app: express.Application = express();
@@ -27,7 +29,21 @@ app.post('/api/register', async (req, res) => {
 
     console.log(`[API] Registering with alias: ${alias}, deviceId: ${deviceId}, ua: ${ua}`);
 
-    return res.json(await register(alias, deviceId, ua));
+    const result = await register(alias ,deviceId, ua);
+
+    if (result === 'InvalidBrowser') { 
+        return res.status(403).json({ error: result });
+    }
+
+    if (result === 'InvalidUser') {
+        return res.status(404).json({ error: result });
+    }
+
+    if (result === 'UnknownError') {
+        return res.status(500).json({ error: result });
+    }
+
+    return res.json(result);
 });
 
 app.get('/api/users', async (req, res) => {
@@ -43,18 +59,33 @@ app.get('/api/users', async (req, res) => {
 });
 
 app.get('/api/config', async (req, res) => {
-    const lotteryConfig = await getLotteryConfig();
+    const cfgData = await getLotteryConfig();
     const users = await getAllUsers();
 
     if (users === 'UnknownError') {
         return res.status(500).json({ error: 'UnknownError' });
     }
 
-    return res.json({
-        cfgData: lotteryConfig,
-        leftUsers: users.map(({ alias, name, team }) => [alias, name, team]),
-        luckyData: {},
-    });
+    const regs = await getAllRegister();
+
+    if (regs === 'UnknownError') {
+        return res.status(500).json({ error: 'UnknownError' });
+    }
+
+    const weight = chain(regs)
+        .groupBy("alias")
+        .mapValues(size)
+        .mapValues((s) => (
+            s > 3 ? 8 :
+            s > 2 ? 4 :
+            s > 1 ? 2 :
+            s > 0 ? 1 : 0
+        ))
+        .value();
+
+    const leftUsers = users.map(({ alias, name, team }) => [alias, name, team, weight[alias] || DEFAULT_WEIGHT]);
+
+    return res.json({ cfgData, leftUsers, luckyData: {} });
 });
 
 app.post('/api/admin/setUsers', async (req, res) => {
