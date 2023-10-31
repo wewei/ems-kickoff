@@ -9,83 +9,61 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = exports.register = void 0;
+exports.clearRegisterDB = exports.getAllRegister = exports.register = exports.getAllUsers = exports.clearUsersDB = exports.setAllUsers = void 0;
 const level_1 = require("level");
-const promises_1 = require("fs/promises");
-const lodash_1 = require("lodash");
-const app_root_path_1 = require("app-root-path");
-function normalizeTeams(teams) {
-    if (!(0, lodash_1.isArray)(teams)) {
-        console.error("Team list is not an Array");
-        return [];
-    }
-    return teams.reduce((memo, team, idx) => {
-        if (!(0, lodash_1.isString)(team)) {
-            console.error(`Invalid team name at #[${idx}]`);
-        }
-        else {
-            memo.push(team);
-        }
-        return memo;
-    }, []);
-}
-function normalizeUsers(users, teams) {
-    if (!(0, lodash_1.isArray)(users)) {
-        console.error("User list is not an Array");
-        return [];
-    }
-    return users.reduce((memo, user, idx) => {
-        if (!(0, lodash_1.isObject)(user)) {
-            console.error(`User info at #[${idx}] is not an Object`);
-        }
-        else {
-            const { name, alias, team } = user;
-            if (!(0, lodash_1.isString)(name)) {
-                console.error(`Invalid #name at #[${idx}]`);
-            }
-            else if (!(0, lodash_1.isString)(alias)) {
-                console.error(`Invalid #alias at #[${idx}]`);
-            }
-            else if (!(0, lodash_1.isString)(team)) {
-                console.error(`Invalid #team at #[${idx}]`);
-            }
-            memo.push(user);
-        }
-        return memo;
-    }, []);
-}
-const AllUsers = (() => __awaiter(void 0, void 0, void 0, function* () {
-    const dataFilePath = (0, app_root_path_1.resolve)("data/users.json");
-    const data = yield (0, promises_1.readFile)(dataFilePath, "utf-8")
-        .then(JSON.parse)
-        .catch(() => ({}));
-    const teams = normalizeTeams(data.teams);
-    const users = normalizeUsers(data.users, teams);
-    const aliasIndex = (0, lodash_1.chain)(users).groupBy('alias').mapValues(lodash_1.first).value();
-    return { users, teams, aliasIndex };
-}))();
-const db = new level_1.Level('data/lottery-register-index', { valueEncoding: 'json' });
-function register(alias, deviceId, appId) {
+const user_agent_1 = require("../shared/user-agent");
+function read(db, key) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { aliasIndex } = yield AllUsers;
-        if (!(alias in aliasIndex)) {
-            throw new Error("Invalid user");
-        }
-        const data = yield (db.get(deviceId)).catch(() => ({}));
-        const previousAlias = data[appId];
-        data[appId] = alias;
-        yield db.put(deviceId, data);
-        return {
-            from: (previousAlias && aliasIndex[previousAlias]) || null,
-            to: aliasIndex[alias],
-        };
+        return db.get(key).catch(() => null);
     });
 }
-exports.register = register;
+const usersDB = new level_1.Level('data/users', { valueEncoding: 'json' });
+const registerDB = new level_1.Level('data/register', { valueEncoding: 'json' });
+function safeExec(cb) {
+    return cb().catch(err => 'UnknownError');
+}
+function setAllUsers(users) {
+    return safeExec(() => __awaiter(this, void 0, void 0, function* () {
+        yield usersDB.clear();
+        yield usersDB.batch(users.map((user) => {
+            const { alias } = user;
+            return { type: 'put', key: alias, value: user };
+        }));
+    }));
+}
+exports.setAllUsers = setAllUsers;
+function clearUsersDB() {
+    return safeExec(() => usersDB.clear());
+}
+exports.clearUsersDB = clearUsersDB;
 function getAllUsers() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { users } = yield AllUsers;
-        return users;
-    });
+    return safeExec(() => usersDB.values().all());
 }
 exports.getAllUsers = getAllUsers;
+function register(alias, deviceId, ua) {
+    return safeExec(() => __awaiter(this, void 0, void 0, function* () {
+        const user = yield read(usersDB, alias);
+        if (!user)
+            return 'InvalidUser';
+        const app = (0, user_agent_1.detectBrowser)(ua);
+        if (app === 'Others')
+            return 'InvalidBrowser';
+        const key = `${deviceId}/${app}`;
+        const previousAlias = yield read(registerDB, key);
+        const previousUser = previousAlias === null ? null : (yield read(usersDB, alias));
+        yield registerDB.put(key, alias);
+        return { user, previousUser };
+    }));
+}
+exports.register = register;
+function getAllRegister() {
+    return safeExec(() => __awaiter(this, void 0, void 0, function* () {
+        const pairs = yield registerDB.iterator().all();
+        return pairs.map(([key, alias]) => ({ key, alias }));
+    }));
+}
+exports.getAllRegister = getAllRegister;
+function clearRegisterDB() {
+    return safeExec(() => registerDB.clear());
+}
+exports.clearRegisterDB = clearRegisterDB;

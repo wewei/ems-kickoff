@@ -33,8 +33,8 @@ function isEdgeMobile(ua) {
 }
 exports.isEdgeMobile = isEdgeMobile;
 function detectBrowser(ua) {
-    return (isEdge(ua) ? 'Edge' :
-        isEdgeMobile(ua) ? 'EdgeMobile' :
+    return (isEdgeMobile(ua) ? 'EdgeMobile' :
+        isEdge(ua) ? 'Edge' :
             isBingApp(ua) ? 'BingApp' :
                 isStartApp(ua) ? 'StartApp' :
                     'Others');
