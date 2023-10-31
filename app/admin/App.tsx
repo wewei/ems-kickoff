@@ -31,7 +31,7 @@ export default function App(): JSX.Element {
         const content = ref.current?.value || "";
         try {
             const data = JSON.parse(content);
-            axios.post("/admin/setUsers", data).then((res) => {
+            axios.post("/api/admin/setUsers", data).then((res) => {
                 alert(`Upload ${res.data.count} items`);
             }, (err) => {
                 console.log(err);
@@ -43,7 +43,7 @@ export default function App(): JSX.Element {
     }, [ref]);
 
     const clearUserDB = React.useCallback(() => {
-        axios.post("/admin/clearUsersDB", {}).then((res) => {
+        axios.post("/api/admin/clearUsersDB", {}).then((res) => {
             alert("Clear user DB success");
         }, (err) => {
             console.log(err);
@@ -52,7 +52,7 @@ export default function App(): JSX.Element {
     }, []);
 
     const clearRegisterDB = React.useCallback(() => {
-        axios.post("/admin/clearRegisterDB", {}).then((res) => {
+        axios.post("/api/admin/clearRegisterDB", {}).then((res) => {
             alert("Clear register DB success");
         }, (err) => {
             console.log(err);
@@ -61,7 +61,7 @@ export default function App(): JSX.Element {
     }, []);
 
     const downloadUserDB = React.useCallback(() => {
-        axios.get("/admin/getAllUsers").then((res) => {
+        axios.get("/api/admin/getAllUsers").then((res) => {
             if (ref.current) {
                 ref.current.value = JSON.stringify(res.data, null, 2);
             }
@@ -69,7 +69,7 @@ export default function App(): JSX.Element {
     }, [ref]);
 
     const downloadRegisterDB = React.useCallback(() => {
-        axios.get("/admin/getAllRegister").then((res) => {
+        axios.get("/api/admin/getAllRegister").then((res) => {
             if (ref.current) {
                 ref.current.value = JSON.stringify(res.data, null, 2);
             }

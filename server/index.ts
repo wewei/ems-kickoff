@@ -57,7 +57,7 @@ app.get('/api/config', async (req, res) => {
     });
 });
 
-app.post('/admin/setUsers', async (req, res) => {
+app.post('/api/admin/setUsers', async (req, res) => {
     console.log(req.body.teams);
     const teams = normalizeTeams(req.body.teams);
     const users = normalizeUsers(req.body.users, teams);
@@ -72,7 +72,7 @@ app.post('/admin/setUsers', async (req, res) => {
     return res.json({ count: users.length });
 });
 
-app.post('/admin/clearUsersDB', async (req,  res) => {
+app.post('/api/admin/clearUsersDB', async (req,  res) => {
     const result = await clearUsersDB();
 
     if (result === 'UnknownError') {
@@ -81,7 +81,7 @@ app.post('/admin/clearUsersDB', async (req,  res) => {
     return res.json({});
 });
 
-app.get('/admin/getAllUsers', async (req, res) => {
+app.get('/api/admin/getAllUsers', async (req, res) => {
     const users = await getAllUsers();
 
     if (users === 'UnknownError') {
@@ -93,7 +93,7 @@ app.get('/admin/getAllUsers', async (req, res) => {
     return res.json({ users, teams });
 });
 
-app.post('/admin/clearRegisterDB', async (req, res) => {
+app.post('/api/admin/clearRegisterDB', async (req, res) => {
     const result = await clearRegisterDB();
 
     if (result === 'UnknownError') {
@@ -102,7 +102,7 @@ app.post('/admin/clearRegisterDB', async (req, res) => {
     return res.json({});
 });
 
-app.get('/admin/getAllRegister', async (req, res) => {
+app.get('/api/admin/getAllRegister', async (req, res) => {
     const result = await getAllRegister();
 
     if (result === 'UnknownError') {
