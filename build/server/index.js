@@ -57,7 +57,7 @@ app.get('/api/config', (req, res) => __awaiter(void 0, void 0, void 0, function*
         luckyData: {},
     });
 }));
-app.post('/admin/setUsers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/api/admin/setUsers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body.teams);
     const teams = (0, user_1.normalizeTeams)(req.body.teams);
     const users = (0, user_1.normalizeUsers)(req.body.users, teams);
@@ -69,14 +69,14 @@ app.post('/admin/setUsers', (req, res) => __awaiter(void 0, void 0, void 0, func
     }
     return res.json({ count: users.length });
 }));
-app.post('/admin/clearUsersDB', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/api/admin/clearUsersDB', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield (0, db_1.clearUsersDB)();
     if (result === 'UnknownError') {
         return res.status(500).json({ error: 'UnknownError' });
     }
     return res.json({});
 }));
-app.get('/admin/getAllUsers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/api/admin/getAllUsers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield (0, db_1.getAllUsers)();
     if (users === 'UnknownError') {
         return res.status(500).json({ error: 'UnknownError' });
@@ -84,14 +84,14 @@ app.get('/admin/getAllUsers', (req, res) => __awaiter(void 0, void 0, void 0, fu
     const teams = (0, lodash_1.chain)(users).groupBy('team').keys().value();
     return res.json({ users, teams });
 }));
-app.post('/admin/clearRegisterDB', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/api/admin/clearRegisterDB', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield (0, db_1.clearRegisterDB)();
     if (result === 'UnknownError') {
         return res.status(500).json({ error: 'UnknownError' });
     }
     return res.json({});
 }));
-app.get('/admin/getAllRegister', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/api/admin/getAllRegister', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield (0, db_1.getAllRegister)();
     if (result === 'UnknownError') {
         return res.status(500).json({ error: 'UnknownError' });
