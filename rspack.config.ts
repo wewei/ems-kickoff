@@ -17,6 +17,9 @@ const config: Configuration = {
             }, {
                 from: './app/lottery/assets',
                 to: './lottery/assets',
+            }, {
+                from: './app/register/assets',
+                to: './register/assets',
             }],
         },
     },
