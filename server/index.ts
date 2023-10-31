@@ -17,8 +17,8 @@ app.use(express.static(resolve("dist")));
 const port: number = Number.parseInt(process.env.PORT || "3000");
  
 // Handling '/' Request
-app.get('/', (_req, _res) => {
-    _res.send("TypeScript With Express.");
+app.get('/', (req, res) => {
+    res.redirect('/register');
 });
 
 app.post('/api/register', async (req, res) => {
