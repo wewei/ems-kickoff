@@ -29,10 +29,10 @@ app.get('/', (_req, _res) => {
     _res.send("TypeScript With Express.");
 });
 app.post('/api/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId, deviceId } = req.body;
+    const { alias, deviceId } = req.body;
     const ua = req.get('User-Agent') || "Unknown UA";
-    const oldUserId = yield (0, db_1.register)(userId, deviceId, ua);
-    return res.json({ oldUserId });
+    console.log(`Registering with alias: ${alias}, deviceId: ${deviceId}, ua: ${ua}`);
+    return res.json(yield (0, db_1.register)(alias, deviceId, ua));
 }));
 app.get('/api/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield (0, db_1.getAllUsers)();
