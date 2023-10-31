@@ -16,6 +16,7 @@ body {
     flex-direction: column;
     height: 100%;
     width: 100%;
+    font-family: "Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
 
     .title {
         flex-grow: 0;
@@ -28,19 +29,20 @@ body {
     .title-chs {
         color: white;
         font-size: xx-large;
-        font-family: "Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+        margin-bottom: 5px;
     }
 
     .title-eng {
         color: white;
-        font-size: xx-large;
+        font-size: x-large;
         font-family: sans-serif;
     }
 
     .register-form {
+        display: flex;
+        flex-direction: row;
         text-align: center;
         justify-content: center;
-
     }
 
     .top-filler {
@@ -58,25 +60,37 @@ body {
 
     .alias-input {
         text-align: center;
-        font-size: x-large;
+        font-size: medium;
         color: black;
         background-color: white;
+        height: 30px;
         width: 200px;
         border: none;
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
         outline: none;
     }
 
     .submit-button {
-        font-size: x-large;
-        color: black;
-        background-color: white;
+        font-size: medium;
+        /* color: black; */
+        /* background-color: white; */
+        height: 32px;
         border: none;
         border-left-style: solid;
         border-left-color: orange;
         border-left-width: 2px;
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        box-shadow: none;
+    }
+
+    .rollback-button {
+        font-size: large;
+        height: 32px;
+        border: none;
+        border-radius: 5px;
+        padding-left: 8px;
+        padding-right: 8px;
     }
 }

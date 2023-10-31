@@ -2,12 +2,7 @@ import { Level } from "level";
 import { readFile } from "fs/promises";
 import { chain, first, isArray, isObject, isString } from "lodash";
 import { resolve } from "app-root-path";
-
-export type User = {
-    name: string;
-    alias: string;
-    team: string;
-};
+import { User } from "../shared/user";
 
 function normalizeTeams(teams: any): string[] {
     if (!isArray(teams)) {
