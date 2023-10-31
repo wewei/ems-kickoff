@@ -27,8 +27,8 @@ app.use(express_1.default.static((0, app_root_path_1.resolve)("dist")));
 // Take a port 3000 for running server.
 const port = Number.parseInt(process.env.PORT || "3000");
 // Handling '/' Request
-app.get('/', (_req, _res) => {
-    _res.send("TypeScript With Express.");
+app.get('/', (req, res) => {
+    res.redirect('/register');
 });
 app.post('/api/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { alias, deviceId } = req.body;
