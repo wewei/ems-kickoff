@@ -43,7 +43,7 @@ export default function App(): JSX.Element {
     }, [ref]);
 
     const clearUserDB = React.useCallback(() => {
-        axios.post("/admin/clearUserDB", {}).then((res) => {
+        axios.post("/admin/clearUsersDB", {}).then((res) => {
             alert("Clear user DB success");
         }, (err) => {
             console.log(err);
