@@ -1,8 +1,9 @@
 // Import the express in typescript file
 import express from 'express';
 import path from 'path';
-import { register } from './db';
+import { getAllUsers, register } from './db';
 import bodyParser from 'body-parser'; 
+import { getLotteryConfig } from './lottery-config';
 
 // Initialize the express engine
 const app: express.Application = express();
@@ -25,6 +26,24 @@ app.post('/api/register', async (req, res) => {
     const oldUserId = await register(userId, deviceId, ua);
 
     return res.json({ oldUserId });
+});
+
+app.get('/api/users', async (req, res) => {
+    const users = await getAllUsers();
+    return res.json({
+        users: users.map(({ alias, name, team }) => [alias, name, team]),
+    });
+});
+
+app.get('/api/config', async (req, res) => {
+    const lotteryConfig = await getLotteryConfig();
+    const users = await getAllUsers();
+
+    return res.json({
+        cfgData: lotteryConfig,
+        leftUsers: users.map(({ alias, name, team }) => [alias, name, team]),
+        luckyData: {},
+    });
 });
  
 // Server setup

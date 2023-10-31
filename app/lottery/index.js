@@ -1,3 +1,4 @@
+import axios from "axios";
 import "./index.css";
 import "./canvas.js";
 import {
@@ -62,9 +63,8 @@ initAll();
  * 初始化所有DOM
  */
 function initAll() {
-  window.AJAX({
-    url: "/getTempData",
-    success(data) {
+  axios.get("/api/config")
+    .then(({ data }) => {
       // 获取基础数据
       prizes = data.cfgData.prizes;
       EACH_COUNT = data.cfgData.EACH_COUNT;
@@ -84,7 +84,7 @@ function initAll() {
         if (
           data.luckyData[prizeIndex] &&
           data.luckyData[prizeIndex].length >=
-            basicData.prizes[prizeIndex].count
+          basicData.prizes[prizeIndex].count
         ) {
           continue;
         }
@@ -96,20 +96,16 @@ function initAll() {
       showPrizeList(currentPrizeIndex);
       let curLucks = basicData.luckyUsers[currentPrize.type];
       setPrizeData(currentPrizeIndex, curLucks ? curLucks.length : 0, true);
-    }
-  });
+    });
 
-  window.AJAX({
-    url: "/getUsers",
-    success(data) {
-      basicData.users = data;
+  axios.get("/api/users").then(({ data }) => {
+    basicData.users = data.users;
 
-      initCards();
-      // startMaoPao();
-      animate();
-      shineCard();
-    }
-  });
+    initCards();
+    // startMaoPao();
+    animate();
+    shineCard();
+  })
 }
 
 function initCards() {
