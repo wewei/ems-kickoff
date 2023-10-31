@@ -1,0 +1,2 @@
+!function(){var o={757:function(o,r,t){console.log("Hello, Lottery!")}},r={};!function t(e){var n=r[e];if(void 0!==n)return n.exports;var i=r[e]={exports:{}};return o[e](i,i.exports,t),i.exports}("757")}();
+//# sourceMappingURL=lottery.js.map

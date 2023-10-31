@@ -14,11 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // Import the express in typescript file
 const express_1 = __importDefault(require("express"));
+const path_1 = __importDefault(require("path"));
 const db_1 = require("./db");
 const body_parser_1 = __importDefault(require("body-parser"));
 // Initialize the express engine
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json({ limit: "1mb" }));
+app.use(express_1.default.static(path_1.default.resolve(__dirname, "../dist")));
 // Take a port 3000 for running server.
 const port = Number.parseInt(process.env.PORT || "3000");
 // Handling '/' Request

@@ -1,0 +1,1 @@
+{"version":3,"file":"register.js","sources":["./app/register.tsx"],"sourcesContent":["console.log(\"Hello, Register!\");"],"names":["console","log"],"mappings":"uCAAAA,QAAQC,GAAG,CAAC,mB"}

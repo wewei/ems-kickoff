@@ -1,0 +1,1 @@
+{"version":3,"file":"lottery.js","sources":["./app/lottery.ts"],"sourcesContent":["console.log(\"Hello, Lottery!\");"],"names":["console","log"],"mappings":"uCAAAA,QAAQC,GAAG,CAAC,kB"}
