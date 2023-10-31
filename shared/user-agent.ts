@@ -39,8 +39,8 @@ export type Browser
 
 export function detectBrowser(ua: string): Browser {
     return (
-        isEdge(ua) ? 'Edge' :
         isEdgeMobile(ua) ? 'EdgeMobile' :
+        isEdge(ua) ? 'Edge' :
         isBingApp(ua) ? 'BingApp' :
         isStartApp(ua) ? 'StartApp' :
         'Others'

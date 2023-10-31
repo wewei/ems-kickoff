@@ -42,9 +42,8 @@ function UnregisteredPanel({ onRegister }: UnregisteredPanelProps): JSX.Element 
 
     const submit = React.useCallback(async () => {
         const deviceId = await $deviceId;
-        console.log(deviceId);
         axios.post('/api/register', { alias, deviceId }).then((res) => {
-            const user: User = res.data.to;
+            const user: User = res.data.user;
             onRegister(user);
         });
     }, [alias]);
@@ -72,7 +71,6 @@ export default function App(): JSX.Element {
         deleteFromStorage(LOCAL_STORAGE_KEY);
     }, []);
     const confirmRegistered = React.useCallback((user: User) => {
-        console.log(user);
         setUser(user);
     }, []);
 
