@@ -20,6 +20,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const lottery_config_1 = require("./lottery-config");
 const user_1 = require("../shared/user");
 const lodash_1 = require("lodash");
+const DEFAULT_WEIGHT = 0.001;
 // Initialize the express engine
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json({ limit: "1mb" }));
@@ -34,7 +35,17 @@ app.post('/api/register', (req, res) => __awaiter(void 0, void 0, void 0, functi
     const { alias, deviceId } = req.body;
     const ua = req.get('User-Agent') || "Unknown UA";
     console.log(`[API] Registering with alias: ${alias}, deviceId: ${deviceId}, ua: ${ua}`);
-    return res.json(yield (0, db_1.register)(alias, deviceId, ua));
+    const result = yield (0, db_1.register)(alias, deviceId, ua);
+    if (result === 'InvalidBrowser') {
+        return res.status(403).json({ error: result });
+    }
+    if (result === 'InvalidUser') {
+        return res.status(404).json({ error: result });
+    }
+    if (result === 'UnknownError') {
+        return res.status(500).json({ error: result });
+    }
+    return res.json(result);
 }));
 app.get('/api/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield (0, db_1.getAllUsers)();
@@ -46,16 +57,25 @@ app.get('/api/users', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     });
 }));
 app.get('/api/config', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const lotteryConfig = yield (0, lottery_config_1.getLotteryConfig)();
+    const cfgData = yield (0, lottery_config_1.getLotteryConfig)();
     const users = yield (0, db_1.getAllUsers)();
     if (users === 'UnknownError') {
         return res.status(500).json({ error: 'UnknownError' });
     }
-    return res.json({
-        cfgData: lotteryConfig,
-        leftUsers: users.map(({ alias, name, team }) => [alias, name, team]),
-        luckyData: {},
-    });
+    const regs = yield (0, db_1.getAllRegister)();
+    if (regs === 'UnknownError') {
+        return res.status(500).json({ error: 'UnknownError' });
+    }
+    const weight = (0, lodash_1.chain)(regs)
+        .groupBy("alias")
+        .mapValues(lodash_1.size)
+        .mapValues((s) => (s > 3 ? 8 :
+        s > 2 ? 4 :
+            s > 1 ? 2 :
+                s > 0 ? 1 : 0))
+        .value();
+    const leftUsers = users.map(({ alias, name, team }) => [alias, name, team, weight[alias] || DEFAULT_WEIGHT]);
+    return res.json({ cfgData, leftUsers, luckyData: {} });
 }));
 app.post('/api/admin/setUsers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body.teams);

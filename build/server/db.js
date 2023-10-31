@@ -46,8 +46,7 @@ function register(alias, deviceId, ua) {
         if (!user)
             return 'InvalidUser';
         const app = (0, user_agent_1.detectBrowser)(ua);
-        if (app === 'Others')
-            return 'InvalidBrowser';
+        // if (app === 'Others') return 'InvalidBrowser';
         const key = `${deviceId}/${app}`;
         const previousAlias = yield read(registerDB, key);
         const previousUser = previousAlias === null ? null : (yield read(usersDB, alias));
