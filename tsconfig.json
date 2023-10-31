@@ -1,8 +1,9 @@
 {
+  "include": ["server/**/*"],
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
-    "rootDir": "./src",
+    "module": "CommonJS",
+    "rootDir": "./server",
     "outDir": "./build",
     "esModuleInterop": true,
     "strict": true
