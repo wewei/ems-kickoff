@@ -5,6 +5,7 @@ import { HtmlRspackPlugin } from '@rspack/core';
 const entry = {
     lottery: './app/lottery/index.js',
     register: './app/register/index.tsx',
+    admin: './app/admin/index.tsx',
 };
 
 const config: Configuration = {

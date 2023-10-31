@@ -1,81 +1,76 @@
 import { Level } from "level";
-import { readFile } from "fs/promises";
-import { chain, first, isArray, isObject, isString } from "lodash";
-import { resolve } from "app-root-path";
 import { User } from "../shared/user";
+import { detectBrowser } from "../shared/user-agent";
 
-function normalizeTeams(teams: any): string[] {
-    if (!isArray(teams)) {
-        console.error("Team list is not an Array");
-        return [];
-    }
-    return teams.reduce((memo, team, idx) => {
-        if (!isString(team)) {
-            console.error(`Invalid team name at #[${idx}]`);
-        } else {
-            memo.push(team);
-        }
-        return memo;
-    }, []);
+async function read<T>(db: Level<string, T>, key: string): Promise<T | null> {
+    return db.get(key).catch(() => null);
 }
 
-function normalizeUsers(users: any, teams: string[]): User[] {
-    if (!isArray(users)) {
-        console.error("User list is not an Array");
-        return [];
-    }
-    return users.reduce((memo, user, idx) => {
-        if (!isObject(user)) {
-            console.error(`User info at #[${idx}] is not an Object`);
-        } else {
-            const { name, alias, team } = user as User;
-            if (!isString(name)) {
-                console.error(`Invalid #name at #[${idx}]`);
-            } else if (!isString(alias)) {
-                console.error(`Invalid #alias at #[${idx}]`);
-            } else if (!isString(team)) {
-                console.error(`Invalid #team at #[${idx}]`);
-            }
-            memo.push(user);
-        }
-        return memo;
-    }, []);
+const usersDB = new Level<string, User>('data/users', { valueEncoding: 'json' });
+const registerDB = new Level<string, string>('data/register', { valueEncoding: 'json' });
+
+export type UnknownError = 'UnknownError';
+
+export type ExecResult<T, E = never> = Promise<T | E | UnknownError>
+
+function safeExec<T>(cb: () => Promise<T>): ExecResult<T> {
+    return cb().catch(err => 'UnknownError');
 }
 
-const AllUsers = (async () => {
-    const dataFilePath = resolve("data/users.json");
-    const data = await readFile(dataFilePath, "utf-8")
-        .then(JSON.parse)
-        .catch(() => ({}));
-    const teams = normalizeTeams(data.teams);
-    const users = normalizeUsers(data.users, teams);
-    const aliasIndex = chain(users).groupBy('alias').mapValues(first).value() as Record<string, User>;
+export function setAllUsers(users: User[]): ExecResult<void> {
+    return safeExec(async () => {
+        await usersDB.clear();
 
-    return { users, teams, aliasIndex };
-})();
+        await usersDB.batch(users.map((user) => {
+            const { alias } = user;
+            return { type: 'put', key: alias, value: user };
+        }));
 
-const db = new Level<string, Record<string, string>>('data/lottery-register-index', { valueEncoding: 'json' });
-
-export async function register(alias: string, deviceId: string, appId: string): Promise<{ from: User | null, to: User}> {
-    const { aliasIndex } = await AllUsers;
-
-    if (!(alias in aliasIndex)) {
-        throw new Error("Invalid user");
-    }
-
-    const data: Record<string, string> = await (db.get(deviceId)).catch(() => ({}));
-    const previousAlias = data[appId];
-    data[appId] = alias;
-    await db.put(deviceId, data);
-
-    return {
-        from: (previousAlias && aliasIndex[previousAlias]) || null,
-        to: aliasIndex[alias],
-    };
+    });
 }
 
-export async function getAllUsers(): Promise<User[]> {
-    const { users } = await AllUsers;
+export function clearUsersDB(): ExecResult<void> {
+    return safeExec(() => usersDB.clear());
+}
 
-    return users;
+export function getAllUsers(): ExecResult<User[]> {
+    return safeExec(() => usersDB.values().all());
+}
+
+export type RegisterResult = {
+    user: User;
+    previousUser: User | null;
+};
+
+export type RegisterError = 'InvalidUser' | 'InvalidBrowser';
+
+export function register(alias: string, deviceId: string, ua: string): ExecResult<RegisterResult, RegisterError> {
+    return safeExec(async () => {
+        const user = await read(usersDB, alias);
+        if (!user) return 'InvalidUser';
+
+        const app = detectBrowser(ua);
+        if (app === 'Others') return 'InvalidBrowser';
+
+        const key = `${deviceId}/${app}`;
+        const previousAlias = await read(registerDB, key);
+        const previousUser = previousAlias === null ? null : (await read(usersDB, alias));
+
+        await registerDB.put(key, alias);
+
+        return { user, previousUser };
+    });
+}
+
+export type GetAllRegisterResult = { key: string, alias: string }[]
+
+export function getAllRegister(): ExecResult<GetAllRegisterResult> {
+    return safeExec(async () => {
+        const pairs = await registerDB.iterator().all();
+        return pairs.map(([key, alias]) => ({ key, alias }));
+    });
+}
+
+export function clearRegisterDB(): ExecResult<void> {
+    return safeExec(() => registerDB.clear());
 }
