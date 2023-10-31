@@ -1,6 +1,6 @@
 // Import the express in typescript file
 import express from 'express';
-import path from 'path';
+import { resolve } from "app-root-path";
 import { getAllUsers, register } from './db';
 import bodyParser from 'body-parser'; 
 import { getLotteryConfig } from './lottery-config';
@@ -9,7 +9,7 @@ import { getLotteryConfig } from './lottery-config';
 const app: express.Application = express();
 
 app.use(bodyParser.json({ limit: "1mb" }));
-app.use(express.static(path.resolve(__dirname, "../dist")));
+app.use(express.static(resolve("dist")));
  
 // Take a port 3000 for running server.
 const port: number = Number.parseInt(process.env.PORT || "3000");
