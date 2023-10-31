@@ -8,15 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllUsers = exports.register = void 0;
 const level_1 = require("level");
 const promises_1 = require("fs/promises");
 const lodash_1 = require("lodash");
-const path_1 = __importDefault(require("path"));
+const app_root_path_1 = require("app-root-path");
 function normalizeTeams(teams) {
     if (!(0, lodash_1.isArray)(teams)) {
         console.error("Team list is not an Array");
@@ -58,11 +55,10 @@ function normalizeUsers(users, teams) {
     }, []);
 }
 const AllUsers = (() => __awaiter(void 0, void 0, void 0, function* () {
-    const dataFilePath = path_1.default.resolve(__dirname, "../data/users.json");
+    const dataFilePath = (0, app_root_path_1.resolve)("data/users.json");
     const data = yield (0, promises_1.readFile)(dataFilePath, "utf-8")
         .then(JSON.parse)
         .catch(() => ({}));
-    console.log(data);
     const teams = normalizeTeams(data.teams);
     const users = normalizeUsers(data.users, teams);
     const aliasIndex = (0, lodash_1.chain)(users).groupBy('alias').mapValues(lodash_1.first).value();
