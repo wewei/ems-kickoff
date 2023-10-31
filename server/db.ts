@@ -50,7 +50,7 @@ export function register(alias: string, deviceId: string, ua: string): ExecResul
         if (!user) return 'InvalidUser';
 
         const app = detectBrowser(ua);
-        if (app === 'Others') return 'InvalidBrowser';
+        // if (app === 'Others') return 'InvalidBrowser';
 
         const key = `${deviceId}/${app}`;
         const previousAlias = await read(registerDB, key);
