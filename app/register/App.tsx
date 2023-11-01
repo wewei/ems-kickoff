@@ -43,9 +43,9 @@ function UnregisteredPanel({ onRegister, onInvalidAlias }: UnregisteredPanelProp
 
     const submit = React.useCallback(async () => {
         const deviceId = await $deviceId;
-        if (browser === 'BingApp' || browser === 'StartApp') {
-            alert(`Alias: ${alias}, DeviceId: ${deviceId}`);
-        }
+        // if (browser === 'BingApp' || browser === 'StartApp') {
+        //     alert(`Alias: ${alias}, DeviceId: ${deviceId}`);
+        // }
         axios.post('/api/register', { alias, deviceId }).then((res) => {
             const user: User = res.data.user;
             onRegister(user);
@@ -100,6 +100,8 @@ function InvalidBrowserPanel({ }: InvalidBrowserPanelProps): JSX.Element {
             <div className="top-filler" />
             <div className="title title-chs">请在 Edge (mobile), Bing 或 Start 中打开此页面</div>
             <div className="title title-eng">Please open the page with Edge (mobile), Bing or Start</div>
+            <div className="mid-filler" />
+            <div className="title title-eng"><a href="https://app.adjust.com/vehqu7h_ueso5h4">Download Edge</a></div>
             <div className="bot-filler" />
         </div>
     );
