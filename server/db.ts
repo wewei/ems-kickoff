@@ -1,6 +1,6 @@
 import { Level } from "level";
 import { User } from "../shared/user";
-import { detectBrowser } from "../shared/user-agent";
+import { detectBrowser, isBrowserUnsupported } from "../shared/user-agent";
 
 async function read<T>(db: Level<string, T>, key: string): Promise<T | null> {
     return db.get(key).catch(() => null);
@@ -50,7 +50,7 @@ export function register(alias: string, deviceId: string, ua: string): ExecResul
         if (!user) return 'InvalidUser';
 
         const app = detectBrowser(ua);
-        // if (app === 'Others') return 'InvalidBrowser';
+        if (isBrowserUnsupported(app)) return 'InvalidBrowser';
 
         const key = `${deviceId}/${app}`;
         const previousAlias = await read(registerDB, key);

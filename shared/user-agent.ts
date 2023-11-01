@@ -31,7 +31,7 @@ export function isEdgeMobile(ua: string): boolean {
 }
 
 export type Browser
-    = 'Edge'
+    = 'Edge' // Edge desktop
     | 'EdgeMobile'
     | 'BingApp'
     | 'StartApp'
@@ -45,4 +45,9 @@ export function detectBrowser(ua: string): Browser {
         isStartApp(ua) ? 'StartApp' :
         'Others'
     );
+}
+
+export function isBrowserUnsupported(browser: Browser): boolean {
+    return browser === 'Others' || browser === 'Edge';
+    // return false;
 }
