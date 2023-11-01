@@ -43,6 +43,9 @@ function UnregisteredPanel({ onRegister, onInvalidAlias }: UnregisteredPanelProp
 
     const submit = React.useCallback(async () => {
         const deviceId = await $deviceId;
+        if (browser === 'BingApp' || browser === 'StartApp') {
+            alert(`Alias: ${alias}, DeviceId: ${deviceId}`);
+        }
         axios.post('/api/register', { alias, deviceId }).then((res) => {
             const user: User = res.data.user;
             onRegister(user);
