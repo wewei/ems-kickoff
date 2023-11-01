@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useLocalStorage, deleteFromStorage } from "@rehooks/local-storage";
-import { User } from "../../shared/user";
 import axios from "axios";
 import Fingerprint from "@fingerprintjs/fingerprintjs";
-
+import { User } from "../../shared/user";
+import { detectBrowser, isBrowserUnsupported } from "../../shared/user-agent";
 
 const $deviceId = Fingerprint.load().then(fp => fp.get()).then(result => result.visitorId);
 
@@ -85,10 +85,26 @@ function InvalidAliasPanel({ alias, onReset }: InvalidAliasPanelProps): JSX.Elem
             </div>
             <div className="bot-filler" />
         </div>
-    )
+    );
+}
+
+type InvalidBrowserPanelProps = {
+};
+
+function InvalidBrowserPanel({ }: InvalidBrowserPanelProps): JSX.Element {
+    return (
+        <div className="register-panel">
+            <div className="top-filler" />
+            <div className="title title-chs">请在 Edge (mobile), Bing 或 Start 中打开此页面</div>
+            <div className="title title-eng">Please open the page with Edge (mobile), Bing or Start</div>
+            <div className="bot-filler" />
+        </div>
+    );
 }
 
 const LOCAL_STORAGE_KEY = 'registered-user';
+const browser = detectBrowser(navigator.userAgent);
+const isUnsupported = isBrowserUnsupported(browser);
 
 export default function App(): JSX.Element {
     const [user, setUser] = useLocalStorage<User>(LOCAL_STORAGE_KEY);
@@ -106,7 +122,10 @@ export default function App(): JSX.Element {
 
     return (
         <div className="app">
-            {user ? (
+            {
+            isUnsupported ? (
+                <InvalidBrowserPanel />
+            ) : user ? (
                 <RegisteredPanel user={user} onReset={reset} />
             ) : invalidAlias ? (
                 <InvalidAliasPanel alias={invalidAlias} onReset={reset} />

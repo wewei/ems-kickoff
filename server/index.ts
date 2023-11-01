@@ -29,7 +29,7 @@ app.post('/api/register', async (req, res) => {
 
     console.log(`[API] Registering with alias: ${alias}, deviceId: ${deviceId}, ua: ${ua}`);
 
-    const result = await register(alias ,deviceId, ua);
+    const result = await register(alias.toLowerCase(), deviceId, ua);
 
     if (result === 'InvalidBrowser') { 
         return res.status(403).json({ error: result });
