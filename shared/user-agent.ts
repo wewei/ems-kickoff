@@ -48,6 +48,6 @@ export function detectBrowser(ua: string): Browser {
 }
 
 export function isBrowserUnsupported(browser: Browser): boolean {
-    return browser === 'Others' || browser === 'Edge';
-    // return false;
+    // return browser === 'Others' || browser === 'Edge';
+    return false;
 }

@@ -122,6 +122,7 @@ export default function App(): JSX.Element {
 
     return (
         <div className="app">
+            <div style={{ position: "fixed"}}>UA: {navigator.userAgent}</div>
             {
             isUnsupported ? (
                 <InvalidBrowserPanel />
