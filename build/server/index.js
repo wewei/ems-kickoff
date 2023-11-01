@@ -35,7 +35,7 @@ app.post('/api/register', (req, res) => __awaiter(void 0, void 0, void 0, functi
     const { alias, deviceId } = req.body;
     const ua = req.get('User-Agent') || "Unknown UA";
     console.log(`[API] Registering with alias: ${alias}, deviceId: ${deviceId}, ua: ${ua}`);
-    const result = yield (0, db_1.register)(alias, deviceId, ua);
+    const result = yield (0, db_1.register)(alias.toLowerCase(), deviceId, ua);
     if (result === 'InvalidBrowser') {
         return res.status(403).json({ error: result });
     }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.detectBrowser = exports.isEdgeMobile = exports.isEdge = exports.isStartApp = exports.isBingApp = void 0;
+exports.isBrowserUnsupported = exports.detectBrowser = exports.isEdgeMobile = exports.isEdge = exports.isStartApp = exports.isBingApp = void 0;
 // Bing UA
 // Android
 //      Mozilla/5.0 (Linux; Android 13; Pixel 7 Build/TQ3A.230901.001; ) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.0.0 Mobile Safari/537.36 BingSapphire/27.3.360000301
@@ -40,3 +40,8 @@ function detectBrowser(ua) {
                     'Others');
 }
 exports.detectBrowser = detectBrowser;
+function isBrowserUnsupported(browser) {
+    return browser === 'Others' || browser === 'Edge';
+    // return false;
+}
+exports.isBrowserUnsupported = isBrowserUnsupported;
