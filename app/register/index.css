@@ -21,23 +21,25 @@ body {
 }
 
 .register-panel .title {
+    color: white;
     flex-grow: 0;
     display: flex;
     flex-direction: row;
     text-align: center;
     justify-content: center;
+    font-family: "Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
 }
 
-.register-panel .title-chs {
-    color: white;
+.register-panel .l1-title {
     font-size: xx-large;
-    margin-bottom: 5px;
 }
 
-.register-panel .title-eng {
-    color: white;
+.register-panel .l2-title {
     font-size: x-large;
-    font-family: sans-serif;
+}
+
+.register-panel .l3-title {
+    font-size: large;
 }
 
 .register-panel .register-form {
@@ -94,4 +96,15 @@ body {
     border-radius: 5px;
     padding-left: 8px;
     padding-right: 8px;
+}
+
+.register-panel .download-link {
+    font-size: large;
+    background-color: white;
+    border-radius: 8px;
+    color: darkgrey;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 3px;
+    text-decoration: none;
 }
