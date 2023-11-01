@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearRegisterDB = exports.getAllRegister = exports.register = exports.getAllUsers = exports.clearUsersDB = exports.setAllUsers = void 0;
 const level_1 = require("level");
 const user_agent_1 = require("../shared/user-agent");
+const lodash_1 = require("lodash");
 function read(db, key) {
     return __awaiter(this, void 0, void 0, function* () {
         return db.get(key).catch(() => null);
@@ -19,6 +20,17 @@ function read(db, key) {
 }
 const usersDB = new level_1.Level('data/users', { valueEncoding: 'json' });
 const registerDB = new level_1.Level('data/register', { valueEncoding: 'json' });
+function buildUserIndex(users) {
+    return (0, lodash_1.chain)(users)
+        .groupBy("alias")
+        .mapValues(lodash_1.first)
+        .value();
+}
+// Cache everything in usersDB
+let userIndex = usersDB
+    .values()
+    .all()
+    .then(buildUserIndex);
 function safeExec(cb) {
     return cb().catch(err => 'UnknownError');
 }
@@ -29,11 +41,15 @@ function setAllUsers(users) {
             const { alias } = user;
             return { type: 'put', key: alias, value: user };
         }));
+        userIndex = Promise.resolve(buildUserIndex(users));
     }));
 }
 exports.setAllUsers = setAllUsers;
 function clearUsersDB() {
-    return safeExec(() => usersDB.clear());
+    return safeExec(() => {
+        userIndex = Promise.resolve({});
+        return usersDB.clear();
+    });
 }
 exports.clearUsersDB = clearUsersDB;
 function getAllUsers() {
@@ -42,7 +58,8 @@ function getAllUsers() {
 exports.getAllUsers = getAllUsers;
 function register(alias, deviceId, ua) {
     return safeExec(() => __awaiter(this, void 0, void 0, function* () {
-        const user = yield read(usersDB, alias);
+        const user = (yield userIndex)[alias];
+        // const user = await read(usersDB, alias);
         if (!user)
             return 'InvalidUser';
         const app = (0, user_agent_1.detectBrowser)(ua);
@@ -50,7 +67,8 @@ function register(alias, deviceId, ua) {
             return 'InvalidBrowser';
         const key = `${deviceId}/${app}`;
         const previousAlias = yield read(registerDB, key);
-        const previousUser = previousAlias === null ? null : (yield read(usersDB, alias));
+        const previousUser = previousAlias === null ? null : ((yield userIndex)[previousAlias]);
+        // const previousUser = previousAlias === null ? null : (await read(usersDB, previousAlias));
         yield registerDB.put(key, alias);
         return { user, previousUser };
     }));

@@ -78,11 +78,8 @@ app.get('/api/config', (req, res) => __awaiter(void 0, void 0, void 0, function*
     return res.json({ cfgData, leftUsers, luckyData: {} });
 }));
 app.post('/api/admin/setUsers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body.teams);
     const teams = (0, user_1.normalizeTeams)(req.body.teams);
     const users = (0, user_1.normalizeUsers)(req.body.users, teams);
-    console.log(teams);
-    console.log(users);
     const result = yield (0, db_1.setAllUsers)(users);
     if (result === 'UnknownError') {
         return res.status(500).json({ error: 'UnknownError' });
