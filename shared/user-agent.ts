@@ -26,8 +26,16 @@ export function isEdge(ua: string): boolean {
     return /\bEdg\b/.test(ua);
 }
 
+export function isEdgeAndroid(ua: string): boolean {
+    return /\bEdgA\b/.test(ua) && /\bMobile\b/.test(ua);
+}
+
+export function isEdgeiOS(ua: string): boolean {
+    return /\bEdgiOS\b/.test(ua) && /\bMobile\b/.test(ua);
+}
+
 export function isEdgeMobile(ua: string): boolean {
-    return isEdge(ua) && /\bMobile\b/.test(ua);
+    return /\bEdg(A|iOS)?\b/.test(ua) && /\bMobile\b/.test(ua);
 }
 
 export type Browser
@@ -48,6 +56,6 @@ export function detectBrowser(ua: string): Browser {
 }
 
 export function isBrowserUnsupported(browser: Browser): boolean {
-    // return browser === 'Others' || browser === 'Edge';
-    return false;
+    return browser === 'Others' || browser === 'Edge';
+    // return false;
 }
