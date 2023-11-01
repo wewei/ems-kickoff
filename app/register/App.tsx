@@ -17,9 +17,9 @@ function RegisteredPanel({ user, onReset }: RegisteredPanelProps): JSX.Element {
     return (
         <div className="register-panel">
             <div className="top-filler" />
-            <div className="title title-chs">您已注册为</div>
-            <div className="title title-eng">{name} ({alias})</div>
-            <div className="title title-eng">from {team}</div>
+            <div className="title l1-title">您已注册为</div>
+            <div className="title l2-title">{name} ({alias})</div>
+            <div className="title l2-title">from {team}</div>
             <div className="mid-filler" />
             <div className="register-form">
                 <button className="rollback-button" onClick={onReset}>重新注册 (Reset)</button>
@@ -59,8 +59,8 @@ function UnregisteredPanel({ onRegister, onInvalidAlias }: UnregisteredPanelProp
     return (
         <div className="register-panel">
             <div className="top-filler" />
-            <div className="title title-chs">输入 Alias 参与抽奖</div>
-            <div className="title title-eng">Submit your alias</div>
+            <div className="title l1-title">输入 Alias 参与抽奖</div>
+            <div className="title l2-title">Submit your alias</div>
             <div className="mid-filler" />
             <div className="register-form">
                 <input type="text" className="alias-input" value={alias} onChange={updateAlias}></input>
@@ -80,8 +80,8 @@ function InvalidAliasPanel({ alias, onReset }: InvalidAliasPanelProps): JSX.Elem
     return (
         <div className="register-panel">
             <div className="top-filler" />
-            <div className="title title-chs">"{alias}" 不在与会名单中</div>
-            <div className="title title-eng">The alias is not in the attendee list, please check the spell</div>
+            <div className="title l1-title">"{alias}" 不在与会名单中</div>
+            <div className="title l2-title">The alias is not in the attendee list, please check the spell</div>
             <div className="mid-filler" />
             <div className="register-form">
                 <button className="rollback-button" onClick={onReset}>重新注册 (Reset)</button>
@@ -98,10 +98,14 @@ function InvalidBrowserPanel({ }: InvalidBrowserPanelProps): JSX.Element {
     return (
         <div className="register-panel">
             <div className="top-filler" />
-            <div className="title title-chs">请在 Edge (mobile), Bing 或 Start 中打开此页面</div>
-            <div className="title title-eng">Please open the page with Edge (mobile), Bing or Start</div>
+            <div className="title l1-title">请在 Edge (mobile), Bing 或 Start 中打开此页面</div>
+            <div className="title l2-title">Please open the page with Edge (mobile), Bing or Start</div>
             <div className="mid-filler" />
-            <div className="title title-eng"><a href="https://app.adjust.com/vehqu7h_ueso5h4">Download Edge</a></div>
+            <div className="title">
+                <a href="https://app.adjust.com/vehqu7h_ueso5h4" className="download-link">Download Edge</a>
+                <a href="https://app.adjust.com/15oc1rs0_15c4jyw8" className="download-link">Download Bing</a>
+                <a href="https://app.adjust.com/15h0mmeu_15pao2f" className="download-link">Download Start</a>
+            </div>
             <div className="bot-filler" />
         </div>
     );
