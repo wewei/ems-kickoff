@@ -49,7 +49,7 @@ function detectBrowser(ua) {
 }
 exports.detectBrowser = detectBrowser;
 function isBrowserUnsupported(browser) {
-    return browser === 'Others' || browser === 'Edge';
-    // return false;
+    // return browser === 'Others' || browser === 'Edge';
+    return false;
 }
 exports.isBrowserUnsupported = isBrowserUnsupported;
