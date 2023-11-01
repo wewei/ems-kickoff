@@ -98,14 +98,34 @@ function InvalidBrowserPanel({ }: InvalidBrowserPanelProps): JSX.Element {
     return (
         <div className="register-panel">
             <div className="top-filler" />
-            <div className="title l1-title">请在 Edge (mobile), Bing 或 Start 中打开此页面</div>
-            <div className="title l2-title">Please open the page with Edge (mobile), Bing or Start</div>
+            <div className="title l1-title">
+                点击安装应用
+            </div>
+            <div className="title l2-title">
+                Click to install apps
+            </div>
             <div className="mid-filler" />
             <div className="title">
-                <a href="https://app.adjust.com/vehqu7h_ueso5h4" className="download-link">Download Edge</a>
-                <a href="https://app.adjust.com/15oc1rs0_15c4jyw8" className="download-link">Download Bing</a>
-                <a href="https://app.adjust.com/15h0mmeu_15pao2f" className="download-link">Download Start</a>
+                <a
+                    href="https://app.adjust.com/vehqu7h_ueso5h4"
+                    className="download-link"
+                >
+                    <div className="download-icon download-edge" />
+                </a>
+                <a
+                    href="https://app.adjust.com/15oc1rs0_15c4iyw8"
+                    className="download-link"
+                >
+                    <div className="download-icon download-bing" />
+                </a>
+                <a
+                    href="https://app.adjust.com/15h0mmeu_15pao2f"
+                    className="download-link"
+                >
+                    <div className="download-icon download-start" />
+                </a>
             </div>
+            <div className="title note">Bing and Start links are only for global market.</div>
             <div className="bot-filler" />
         </div>
     );
