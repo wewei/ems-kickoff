@@ -89,11 +89,8 @@ app.get('/api/config', async (req, res) => {
 });
 
 app.post('/api/admin/setUsers', async (req, res) => {
-    console.log(req.body.teams);
     const teams = normalizeTeams(req.body.teams);
     const users = normalizeUsers(req.body.users, teams);
-    console.log(teams);
-    console.log(users);
 
     const result = await setAllUsers(users);
     if (result === 'UnknownError') {
