@@ -41,6 +41,10 @@ body {
 .register-panel .l3-title {
     font-size: large;
 }
+.register-panel .note {
+    margin-top: 20px;
+}
+
 
 .register-panel .register-form {
     display: flex;
@@ -99,12 +103,30 @@ body {
 }
 
 .register-panel .download-link {
-    font-size: large;
-    background-color: white;
-    border-radius: 8px;
-    color: darkgrey;
-    margin-left: 2px;
-    margin-right: 2px;
-    padding: 3px;
+    border-radius: 15px;
+    background-color: rgba(220, 180, 180, 0.7);
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
     text-decoration: none;
+}
+
+.register-panel .download-icon {
+    background-size:contain;
+    background-repeat: no-repeat;
+    height: 72px;
+    width: 72px;
+    background-position: center;
+}
+
+.download-edge {
+    background-image: url(assets/edge.png);
+}
+
+.download-bing {
+    background-image: url(assets/bing.png);
+}
+
+.download-start {
+    background-image: url(assets/start.png);
 }
