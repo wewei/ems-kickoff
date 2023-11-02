@@ -5,9 +5,10 @@ import { clearRegisterDB, clearUsersDB, getAllRegister, getAllUsers, register, s
 import bodyParser from 'body-parser'; 
 import { getLotteryConfig } from './lottery-config';
 import { normalizeTeams, normalizeUsers } from '../shared/user';
-import { chain, size } from 'lodash';
+import { chain, isArray, size } from 'lodash';
 
 const DEFAULT_WEIGHT = 0.0001;
+let eclipse = new Set();
 
 // Initialize the express engine
 const app: express.Application = express();
@@ -83,7 +84,12 @@ app.get('/api/config', async (req, res) => {
         ))
         .value();
 
-    const leftUsers = users.map(({ alias, name, team }) => [alias, name, team, weight[alias] || DEFAULT_WEIGHT]);
+    const leftUsers = users.map(({ alias, name, team }) => [
+        alias,
+        name,
+        team,
+        eclipse.has(alias) ? 0 : weight[alias] || DEFAULT_WEIGHT,
+    ]);
 
     return res.json({ cfgData, leftUsers, luckyData: {} });
 });
@@ -138,6 +144,16 @@ app.get('/api/admin/getAllRegister', async (req, res) => {
     }
 
     return res.json(result);
+});
+
+app.get('/api/admin/getEclipse', (req, res) => {
+    return res.json(Array.from(eclipse));
+});
+
+app.post('/api/admin/setEclipse', (req, res) => {
+    const aliasList = isArray(req.body) ? req.body : [];
+    eclipse = new Set(aliasList);
+    return res.json({ count: eclipse.size });
 });
 
 // Server setup

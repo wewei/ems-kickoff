@@ -76,6 +76,30 @@ export default function App(): JSX.Element {
         });
     }, [ref]);
 
+    const donwloadEclipse = React.useCallback(() => {
+        axios.get("/api/admin/getEclipse").then(res => {
+            if (ref.current) {
+                ref.current.value = JSON.stringify(res.data, null, 2);
+            }
+        });
+    }, [ref]);
+
+    const uploadEclipse = React.useCallback(() => {
+        const content = ref.current?.value || "";
+        try {
+            const data = JSON.parse(content);
+            axios.post("/api/admin/setEclipse", data).then((res) => {
+                alert(`Upload ${res.data.count} items`);
+            }, (err) => {
+                console.log(err);
+                alert("Upload failed");
+            });
+        } catch {
+            alert("Invalid JSON");
+        }
+
+    }, [ref]);
+
     return (
         <div>
             <div>
@@ -87,6 +111,8 @@ export default function App(): JSX.Element {
                 <button onClick={uploadUserDB}>Upload User DB</button>
                 <button onClick={downloadUserDB}>Download User DB</button>
                 <button onClick={downloadRegisterDB}>Download Register DB</button>
+                <button onClick={donwloadEclipse}>Download Eclipse</button>
+                <button onClick={uploadEclipse}>Upload Eclipse</button>
                 <div><textarea ref={ref} style={{ width: "100%", height: "500px", resize: "vertical" }} ></textarea></div>
             </div>
 
