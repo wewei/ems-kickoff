@@ -7,7 +7,7 @@ import { getLotteryConfig } from './lottery-config';
 import { normalizeTeams, normalizeUsers } from '../shared/user';
 import { chain, size } from 'lodash';
 
-const DEFAULT_WEIGHT = 0.001;
+const DEFAULT_WEIGHT = 0.0001;
 
 // Initialize the express engine
 const app: express.Application = express();
