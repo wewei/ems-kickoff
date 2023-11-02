@@ -21,6 +21,7 @@ const lottery_config_1 = require("./lottery-config");
 const user_1 = require("../shared/user");
 const lodash_1 = require("lodash");
 const DEFAULT_WEIGHT = 0.0001;
+let eclipse = new Set();
 // Initialize the express engine
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json({ limit: "1mb" }));
@@ -74,7 +75,12 @@ app.get('/api/config', (req, res) => __awaiter(void 0, void 0, void 0, function*
             s > 1 ? 2 :
                 s > 0 ? 1 : 0))
         .value();
-    const leftUsers = users.map(({ alias, name, team }) => [alias, name, team, weight[alias] || DEFAULT_WEIGHT]);
+    const leftUsers = users.map(({ alias, name, team }) => [
+        alias,
+        name,
+        team,
+        eclipse.has(alias) ? 0 : weight[alias] || DEFAULT_WEIGHT,
+    ]);
     return res.json({ cfgData, leftUsers, luckyData: {} });
 }));
 app.post('/api/admin/setUsers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -115,6 +121,14 @@ app.get('/api/admin/getAllRegister', (req, res) => __awaiter(void 0, void 0, voi
     }
     return res.json(result);
 }));
+app.get('/api/admin/getEclipse', (req, res) => {
+    return res.json(Array.from(eclipse));
+});
+app.post('/api/admin/setEclipse', (req, res) => {
+    const aliasList = (0, lodash_1.isArray)(req.body) ? req.body : [];
+    eclipse = new Set(aliasList);
+    return res.json({ count: eclipse.size });
+});
 // Server setup
 app.listen(port, () => {
     console.log(`TypeScript with Express 
