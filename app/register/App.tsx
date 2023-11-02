@@ -107,7 +107,7 @@ function InvalidBrowserPanel({ }: InvalidBrowserPanelProps): JSX.Element {
             <div className="mid-filler" />
             <div className="title">
                 <a
-                    href="https://app.adjust.com/15h0mmeu_15pao2f"
+                    href="https://app.adjust.com/vehqu7h_ueso5h4"
                     className="download-link"
                 >
                     <div className="download-icon download-edge" />
