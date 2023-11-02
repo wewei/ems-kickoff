@@ -20,7 +20,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const lottery_config_1 = require("./lottery-config");
 const user_1 = require("../shared/user");
 const lodash_1 = require("lodash");
-const DEFAULT_WEIGHT = 0.001;
+const DEFAULT_WEIGHT = 0.0001;
 // Initialize the express engine
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json({ limit: "1mb" }));
