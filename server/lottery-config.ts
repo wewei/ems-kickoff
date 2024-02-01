@@ -16,31 +16,31 @@ export async function getLotteryConfig(): Promise<LotteryConfig> {
     return {
         prizes: [{
             type: 0,
-            count: 1000,
+            count: 1,
             text: "特等奖",
             title: "Airpods Pro Max",
             img: '/lottery/assets/0.png',
         }, {
             type: 1,
-            count: 1,
+            count: 5,
             text: "一等奖",
-            title: "Airpods Generation 3",
+            title: "Airpods Pro 2",
             img: '/lottery/assets/1.png',
         }, {
             type: 2,
-            count: 2,
+            count: 10,
             text: "二等奖",
             title: "重力星球鼠标",
             img: '/lottery/assets/2.png',
 
         }, {
             type: 3,
-            count: 5,
+            count: 50,
             text: "三等奖",
             title: "趣味印字T恤",
             img: '/lottery/assets/3.png',
         }],
-        EACH_COUNT: [1, 5, 10, 50],
+        EACH_COUNT: [1, 5, 10, 25],
         COMPANY: "Microsoft",
     };
 }
