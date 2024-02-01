@@ -17,30 +17,30 @@ export async function getLotteryConfig(): Promise<LotteryConfig> {
         prizes: [{
             type: 0,
             count: 1000,
-            text: "特别奖",
-            title: "神秘",
-            img: '/lottery/assets/qizhang.png',
+            text: "特等奖",
+            title: "Airpods Pro Max",
+            img: '/lottery/assets/0.png',
         }, {
             type: 1,
             count: 1,
             text: "一等奖",
-            title: "Qi's lunch",
-            img: '/lottery/assets/qizhang.png',
+            title: "Airpods Generation 3",
+            img: '/lottery/assets/1.png',
         }, {
             type: 2,
             count: 2,
             text: "二等奖",
-            title: "Jingxia's 红包 888",
-            img: '/lottery/assets/redpacket-888.png',
+            title: "重力星球鼠标",
+            img: '/lottery/assets/2.png',
 
         }, {
             type: 3,
             count: 5,
             text: "三等奖",
-            title: "EMS LT's 红包 666",
-            img: '/lottery/assets/redpacket-666.png',
+            title: "趣味印字T恤",
+            img: '/lottery/assets/3.png',
         }],
-        EACH_COUNT: [1, 1, 2, 5],
+        EACH_COUNT: [1, 5, 10, 50],
         COMPANY: "Microsoft",
     };
 }
