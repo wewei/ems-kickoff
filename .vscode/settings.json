@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/711a6842-2e69-4595-8d0d-0965358d7913/resourceGroups/ems-kickoff_group-b18a/providers/Microsoft.Web/sites/ems-kickoff",
+    "appService.deploySubpath": "."
+}
